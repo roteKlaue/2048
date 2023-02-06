@@ -2,10 +2,8 @@ package koejad20.bplaced.net.a2048;
 
 import android.app.AlertDialog;
 import android.graphics.Color;
-import android.graphics.ColorSpace;
 import android.os.Bundle;
 import android.view.GestureDetector;
-import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -14,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 
 import koejad20.bplaced.net.a2048.bl.Colors;
 import koejad20.bplaced.net.a2048.bl.Game2048;
@@ -25,18 +24,18 @@ public class Game extends AppCompatActivity {
     private TextView score;
 
     private final static Map<Integer, Colors> map = new HashMap<>(){{
-        put(0, Colors._1);
-        put(2, Colors._2);
-        put(4, Colors._3);
-        put(8, Colors._4);
-        put(16, Colors._5);
-        put(32, Colors._6);
-        put(64, Colors._7);
-        put(128, Colors._8);
-        put(256, Colors._9);
-        put(512, Colors._10);
-        put(1024, Colors._11);
-        put(2048, Colors._12);
+        put(0, Colors.A1);
+        put(2, Colors.A2);
+        put(4, Colors.A3);
+        put(8, Colors.A4);
+        put(16, Colors.A5);
+        put(32, Colors.A6);
+        put(64, Colors.A7);
+        put(128, Colors.A8);
+        put(256, Colors.A9);
+        put(512, Colors.A10);
+        put(1024, Colors.A11);
+        put(2048, Colors.A12);
     }};
 
     @Override
@@ -77,7 +76,7 @@ public class Game extends AppCompatActivity {
         int[][] a = engine.getGrid();
         for(int i = 0; i < a.length; i++) {
             for (int j = 0; j < a.length; j++) {
-                buttons[i][j].setBackgroundColor(Color.parseColor(map.get(a[i][j]).getRgb()));
+                buttons[i][j].setBackgroundColor(Color.parseColor(Objects.requireNonNull(map.get(a[i][j])).getRgb()));
                 score.setText(String.format(Locale.ENGLISH, "%d", engine.getScore()));
                 if(a[i][j] == 0) {
                     buttons[i][j].setText("");

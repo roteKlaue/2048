@@ -1,16 +1,16 @@
 package koejad20.bplaced.net.a2048.bl
 
 enum class Colors(val rgb: String) {
-    _1("#45caff"),
-    _2("#47c2ff"),
-    _3("#58b9ff"),
-    _4("#70aeff"),
-    _5("#8ca2ff"),
-    _6("#a793ff"),
-    _7("#c083f1"),
-    _8("#d671de"),
-    _9("#e95dc7"),
-    _10("#f648ab"),
-    _11("#fe318c"),
-    _12("#ff1b6b");
+    A1("#45caff"),
+    A2("#47c2ff"),
+    A3("#58b9ff"),
+    A4("#70AEff"),
+    A5("#8ca2ff"),
+    A6("#a793ff"),
+    A7("#c083f1"),
+    A8("#d671de"),
+    A9("#e95dc7"),
+    A10("#f648ab"),
+    A11("#fe318c"),
+    A12("#ff1b6b");
 }
