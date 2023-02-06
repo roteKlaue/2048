@@ -1,29 +1,52 @@
 package koejad20.bplaced.net.a2048;
 
 import android.app.AlertDialog;
+import android.graphics.Color;
+import android.graphics.ColorSpace;
 import android.os.Bundle;
 import android.view.GestureDetector;
+import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
+import koejad20.bplaced.net.a2048.bl.Colors;
 import koejad20.bplaced.net.a2048.bl.Game2048;
 
 public class Game extends AppCompatActivity {
     private final Button[][] buttons = new Button[4][4];
     private final Game2048 engine = new Game2048();
     private GestureDetector gestureDetector;
+    private TextView score;
+
+    private final static Map<Integer, Colors> map = new HashMap<>(){{
+        put(0, Colors._1);
+        put(2, Colors._2);
+        put(4, Colors._3);
+        put(8, Colors._4);
+        put(16, Colors._5);
+        put(32, Colors._6);
+        put(64, Colors._7);
+        put(128, Colors._8);
+        put(256, Colors._9);
+        put(512, Colors._10);
+        put(1024, Colors._11);
+        put(2048, Colors._12);
+    }};
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
+        score = findViewById(R.id.score);
 
         engine.start();
         gestureDetector = new GestureDetector(this, new GesturesSUS(this));
-
 
         int[] ids = {R.id.button, R.id.button2, R.id.button3, R.id.button4, R.id.button5, R.id.button6, R.id.button7, R.id.button8, R.id.button9, R.id.button10, R.id.button11, R.id.button12, R.id.button13, R.id.button14, R.id.button15, R.id.button16};
         for (int i = 0; i < ids.length; i++) {
@@ -54,6 +77,8 @@ public class Game extends AppCompatActivity {
         int[][] a = engine.getGrid();
         for(int i = 0; i < a.length; i++) {
             for (int j = 0; j < a.length; j++) {
+                buttons[i][j].setBackgroundColor(Color.parseColor(map.get(a[i][j]).getRgb()));
+                score.setText(String.format(Locale.ENGLISH, "%d", engine.getScore()));
                 if(a[i][j] == 0) {
                     buttons[i][j].setText("");
                     continue;
