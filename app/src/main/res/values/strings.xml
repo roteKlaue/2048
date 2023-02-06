@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">2048</string>
+    <string name="sus">SUS</string>
+    <string name="_2048">2048</string>
+    <string name="reset">reset</string>
+    <string name="senpaiNoticeMe">↺</string>
+    <string name="backToMainMenu">Back to main menu</string>
+    <string name="confirm">CONFIRM</string>
+    <string name="reject">REJECT</string>
+    <string name="yes">YES</string>
+    <string name="no">NO</string>
+</resources>
