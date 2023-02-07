@@ -3,7 +3,6 @@ package koejad20.bplaced.net.a2048;
 import android.app.AlertDialog;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.view.GestureDetector;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -15,12 +14,12 @@ import java.util.Map;
 import java.util.Objects;
 
 import koejad20.bplaced.net.a2048.bl.Colors;
+import koejad20.bplaced.net.a2048.bl.EasySwipeDetector;
 import koejad20.bplaced.net.a2048.bl.Game2048;
 
 public class Game extends AppCompatActivity {
     private final Button[][] buttons = new Button[4][4];
     private final Game2048 engine = new Game2048();
-    private GestureDetector gestureDetector;
     private TextView score;
 
     private final static Map<Integer, Colors> map = new HashMap<>(){{
@@ -43,15 +42,41 @@ public class Game extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
         score = findViewById(R.id.score);
+        final EasySwipeDetector easySwipeDetector = new EasySwipeDetector(this, 100, 1) {
+
+            @Override
+            public void onSwipeLeft(float distanceX, float distanceY) {
+                engine.move("left");
+                update();
+            }
+
+            @Override
+            public void onSwipeRight(float distanceX, float distanceY) {
+                engine.move("right");
+                update();
+            }
+
+            @Override
+            public void onSwipeDown(float distanceX, float distanceY) {
+                engine.move("down");
+                update();
+            }
+
+            @Override
+            public void onSwipeUp(float distanceX, float distanceY) {
+                engine.move("up");
+                update();
+            }
+        };
 
         engine.start();
-        gestureDetector = new GestureDetector(this, new GesturesSUS(this));
+        //gestureDetector = new GestureDetector(this, new GesturesSUS(this));
 
         int[] ids = {R.id.button, R.id.button2, R.id.button3, R.id.button4, R.id.button5, R.id.button6, R.id.button7, R.id.button8, R.id.button9, R.id.button10, R.id.button11, R.id.button12, R.id.button13, R.id.button14, R.id.button15, R.id.button16};
         for (int i = 0; i < ids.length; i++) {
             Button sus = findViewById(ids[i]);
             sus.setText("");
-            sus.setOnTouchListener((v, event) -> gestureDetector.onTouchEvent(event));
+            sus.setOnTouchListener(easySwipeDetector::onTouch);
             buttons[i / 4][i % 4] = sus;
         }
 
