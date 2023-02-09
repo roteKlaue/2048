@@ -1,12 +1,11 @@
 package koejad20.bplaced.net.a2048.bl;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 
-public abstract class EasySwipeDetector implements View.OnTouchListener {
+public abstract class EasySwipeDetector {
     private final GestureDetector gestureDetector;
 
     public EasySwipeDetector(Context context, int minDistance, int minVelocity) {
@@ -18,20 +17,19 @@ public abstract class EasySwipeDetector implements View.OnTouchListener {
     public abstract void onSwipeDown(float distanceX, float distanceY);
     public abstract void onSwipeUp(float distanceX, float distanceY);
 
-    @SuppressLint("ClickableViewAccessibility")
-    public boolean onTouch(View v, MotionEvent event) {
+    public boolean onTouch(View ignoredV, MotionEvent event) {
         return gestureDetector.onTouchEvent(event);
     }
 
 
     private final class GestureListener extends GestureDetector.SimpleOnGestureListener {
+        private final int SWIPE_DISTANCE_THRESHOLD;
+        private final int SWIPE_VELOCITY_THRESHOLD;
+
         public GestureListener(int minDistance, int minVelocity) {
             SWIPE_DISTANCE_THRESHOLD = minDistance;
             SWIPE_VELOCITY_THRESHOLD = minVelocity;
         }
-
-        private final int SWIPE_DISTANCE_THRESHOLD;
-        private final int SWIPE_VELOCITY_THRESHOLD;
 
         @Override
         public boolean onDown(MotionEvent e) {

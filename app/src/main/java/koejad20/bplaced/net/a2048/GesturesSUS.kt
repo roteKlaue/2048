@@ -2,6 +2,7 @@ package koejad20.bplaced.net.a2048
 
 import android.view.GestureDetector.SimpleOnGestureListener
 import android.view.MotionEvent
+import koejad20.bplaced.net.a2048.bl.Directions
 
 class GesturesSUS(private val context: Game) : SimpleOnGestureListener() {
     private val map: Map<Number, Map<Number, String>> = mapOf(
@@ -36,7 +37,7 @@ class GesturesSUS(private val context: Game) : SimpleOnGestureListener() {
         val type = map[x]?.get(y)
 
         if (type != "error" && type != null) {
-            context.engine.move(type)
+            context.engine.move(Directions.valueOf(type))
             context.update()
         }
 

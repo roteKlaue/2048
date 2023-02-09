@@ -3,43 +3,66 @@ package koejad20.bplaced.net.a2048.bl;
 import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
+/**
+ * Game2048 is a class that represents the 2048 game.
+ *
+ * The Game2048 class provides a simple implementation of the 2048 game, including methods for moving tiles,
+ * adding random tiles, checking if the game is over, and tracking the current score.
+ *
+ * @author roteKlaue
+ * @since 2023-02-09
+ */
 public class Game2048 {
     private static final int GRID_SIZE = 4;
     private int[][] grid = new int[GRID_SIZE][GRID_SIZE];
     private int score = 0;
 
+    /**
+     * Combines the tiles in a row to form a new row.
+     *
+     * @param row The row of tiles to be combined.
+     * @return The new row after the tiles have been combined.
+     * @throws NullPointerException if row is null.
+     */
     private int[] combineTiles(@NonNull int[] row) {
-        ArrayList<Integer> result = new ArrayList<>();
-        boolean skip = false;
-        for (int i = 0; i < row.length; i++) {
-            if (skip) {
-                skip = false;
-                continue;
-            }
+        final ArrayList<Integer> result = new ArrayList<>();
+        int i = 0;
+        while (i < row.length) {
             if (i + 1 < row.length && row[i] == row[i + 1]) {
                 result.add(2 * row[i]);
-                skip = true;
+                i += 2;
             } else if (row[i] != 0) {
                 result.add(row[i]);
+                i++;
+            } else {
+                i++;
             }
         }
         while (result.size() < GRID_SIZE) {
             result.add(0);
         }
-        return result.stream().mapToInt(i -> i).toArray();
+        return result.stream().mapToInt(ie -> ie).toArray();
     }
 
-    private int[][] moveTiles(@NonNull String direction) {
+    /**
+     * Moves the tiles in a specified direction.
+     *
+     * @param direction The direction in which the tiles should be moved.
+     * @return The new grid after the tiles have been moved.
+     * @throws NullPointerException if direction is null.
+     */
+    private int[][] moveTiles(@NonNull Directions direction) {
         switch (direction) {
-            case "left": {
+            case LEFT: {
                 int[][] result = new int[GRID_SIZE][GRID_SIZE];
                 for (int i = 0; i < GRID_SIZE; i++) {
                     result[i] = combineTiles(grid[i]);
                 }
                 return result;
             }
-            case "right": {
+            case RIGHT: {
                 int[][] result = new int[GRID_SIZE][GRID_SIZE];
                 for (int i = 0; i < GRID_SIZE; i++) {
                     int[] reversed = new int[GRID_SIZE];
@@ -53,7 +76,7 @@ public class Game2048 {
                 }
                 return result;
             }
-            case "up": {
+            case UP: {
                 int[][] result = new int[GRID_SIZE][GRID_SIZE];
                 for (int i = 0; i < GRID_SIZE; i++) {
                     int[] column = new int[GRID_SIZE];
@@ -67,7 +90,7 @@ public class Game2048 {
                 }
                 return result;
             }
-            case "down": {
+            case DOWN: {
                 int[][] result = new int[GRID_SIZE][GRID_SIZE];
                 for (int i = 0; i < GRID_SIZE; i++) {
                     int[] column = new int[GRID_SIZE];
@@ -86,8 +109,15 @@ public class Game2048 {
         }
     }
 
+    /**
+     * Adds a random tile (either 2 or 4) to an empty cell in the grid.
+     *
+     * This method selects an empty cell in the grid randomly, and sets its value to either 2 or 4.
+     * If there are no empty cells in the grid, this method does nothing.
+     */
     private void addRandomTile() {
-        ArrayList<int[]> emptyTiles = new ArrayList<>();
+        int res = Math.random() < 0.9 ? 2 : 4;
+        final ArrayList<int[]> emptyTiles = new ArrayList<>();
         for (int i = 0; i < GRID_SIZE; i++) {
             for (int j = 0; j < GRID_SIZE; j++) {
                 if (grid[i][j] == 0) {
@@ -95,14 +125,20 @@ public class Game2048 {
                 }
             }
         }
+
         if (emptyTiles.size() > 0) {
             int[] randomTile = emptyTiles.get((int) (Math.random() * emptyTiles.size()));
-            grid[randomTile[0]][randomTile[1]] = Math.random() < 0.9 ? 2 : 4;
+            grid[randomTile[0]][randomTile[1]] = res;
         }
 
-        score += Math.random() < 0.9 ? 2 : 4;
+        score += res;
     }
 
+    /**
+     * Checks if the game is over or not.
+     *
+     * @return true if there are no more moves available, false otherwise.
+     */
     private boolean isGameOver() {
         for (int i = 0; i < GRID_SIZE; i++) {
             for (int j = 0; j < GRID_SIZE; j++) {
@@ -126,6 +162,9 @@ public class Game2048 {
         return true;
     }
 
+    /**
+     * Starts a new game of 2048.
+     */
     public void start() {
         grid = new int[GRID_SIZE][GRID_SIZE];
         addRandomTile();
@@ -133,9 +172,15 @@ public class Game2048 {
         score = 0;
     }
 
-    public boolean move(String direction) {
+    /**
+     * Move tiles in the game board.
+     *
+     * @param direction the direction to move the tiles
+     * @return `true` if the move was successful, `false` otherwise.
+     */
+    public boolean move(Directions direction) {
         int[][] moved = moveTiles(direction);
-        if (moved == grid) {
+        if (Arrays.deepEquals(moved, grid)) {
             return false;
         }
         grid = moved;
@@ -155,7 +200,7 @@ public class Game2048 {
     }
 
     public boolean isOver () {
-        return isGameOver();
+        return isGameOver() || isWon();
     }
 
     public int[][] getGrid () {

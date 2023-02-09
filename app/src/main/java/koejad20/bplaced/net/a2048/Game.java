@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -14,6 +15,7 @@ import java.util.Map;
 import java.util.Objects;
 
 import koejad20.bplaced.net.a2048.bl.Colors;
+import koejad20.bplaced.net.a2048.bl.Directions;
 import koejad20.bplaced.net.a2048.bl.EasySwipeDetector;
 import koejad20.bplaced.net.a2048.bl.Game2048;
 
@@ -46,25 +48,29 @@ public class Game extends AppCompatActivity {
 
             @Override
             public void onSwipeLeft(float distanceX, float distanceY) {
-                engine.move("left");
+                engine.move(Directions.LEFT);
+                Toast.makeText(Game.this, "LEFT", Toast.LENGTH_SHORT).show();
                 update();
             }
 
             @Override
             public void onSwipeRight(float distanceX, float distanceY) {
-                engine.move("right");
+                engine.move(Directions.RIGHT);
+                Toast.makeText(Game.this, "RIGHT", Toast.LENGTH_SHORT).show();
                 update();
             }
 
             @Override
             public void onSwipeDown(float distanceX, float distanceY) {
-                engine.move("down");
+                engine.move(Directions.DOWN);
+                Toast.makeText(Game.this, "DOWN", Toast.LENGTH_SHORT).show();
                 update();
             }
 
             @Override
             public void onSwipeUp(float distanceX, float distanceY) {
-                engine.move("up");
+                engine.move(Directions.UP);
+                Toast.makeText(Game.this, "UP", Toast.LENGTH_SHORT).show();
                 update();
             }
         };
@@ -76,9 +82,10 @@ public class Game extends AppCompatActivity {
         for (int i = 0; i < ids.length; i++) {
             Button sus = findViewById(ids[i]);
             sus.setText("");
-            sus.setOnTouchListener(easySwipeDetector::onTouch);
             buttons[i / 4][i % 4] = sus;
         }
+
+        findViewById(R.id.controller).setOnTouchListener(easySwipeDetector::onTouch);
 
         findViewById(R.id.imageButton).setOnClickListener(v -> new AlertDialog.Builder(this)
                 .setTitle("Reset")
@@ -114,7 +121,7 @@ public class Game extends AppCompatActivity {
         if (engine.isOver()) {
             new AlertDialog.Builder(this)
                     .setTitle("Game Over")
-                    .setMessage(engine.isWon()? "You Won.": "You Lost.")
+                    .setMessage(String.format(Locale.ENGLISH, "You %s. Your Score: %d\n", engine.isWon()? "Won": "Lost", engine.getScore()))
                     .setPositiveButton(R.string.backToMainMenu, (dialog, which) -> {
                         dialog.dismiss();
                         finish();
